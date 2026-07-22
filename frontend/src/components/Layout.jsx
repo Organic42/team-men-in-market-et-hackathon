@@ -17,7 +17,8 @@ export default function Layout() {
   return (
     <div className="app">
       <nav className="nav">
-        <div className="brand">CRUXIQ</div>
+        {/* renders as CRUX + "IQ" (two-tone via .brand::after in themes.css) */}
+        <div className="brand">CRUX</div>
         <div className="nav-links">
           {NAV.map(n => (
             <NavLink key={n.to} to={n.to} end={n.to === "/"}

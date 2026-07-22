@@ -4,6 +4,8 @@
 
 An AI-powered intelligence platform for Indian industrial energy buyers. Turns raw geopolitical noise into procurement decisions before price shocks hit domestic gas markets.
 
+**👉 Judges: start with the [full walkthrough with screenshots](docs/JUDGES.md).**
+
 ---
 
 ## The one-sentence pitch
