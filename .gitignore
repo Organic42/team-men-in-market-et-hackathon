@@ -39,3 +39,6 @@ scratchpad/
 # ── Runtime logs ────────────────────────────────────
 backfill.log
 *.pid
+
+# Local Netlify folder
+.netlify
