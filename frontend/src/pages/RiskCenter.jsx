@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCorridors } from "../lib/api";
+import { getCorridors, getPlantImpact } from "../lib/api";
 import CorridorGauge from "../components/CorridorGauge";
 import WorldMap from "../components/WorldMap";
 import DeltaChip from "../components/DeltaChip";
@@ -17,7 +17,11 @@ export default function RiskCenter() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [lineageKey, setLineageKey] = useState(null);
-  useEffect(() => { getCorridors().then(setData).catch(e => setError(String(e))); }, []);
+  const [impact, setImpact] = useState(null);
+  useEffect(() => {
+    getCorridors().then(setData).catch(e => setError(String(e)));
+    getPlantImpact("cement", 2, 30).then(setImpact).catch(() => {});
+  }, []);
 
   const composite = data ? Math.round(
     data.hormuz.score * 0.6 + data.red_sea.score * 0.3 + data.caspian.score * 0.1
@@ -43,19 +47,25 @@ export default function RiskCenter() {
       <div className="page-head">
         <div>
           <div className="panel-title" style={{ marginBottom: 4 }}>
-            <span className="dot" /> INDIA ENERGY SUPPLY RISK · COMPOSITE
+            <span className="dot" /> EXPOSURE AT CURRENT RISK · 30-DAY
           </div>
-          <div className="hstack" style={{ gap: 14 }}>
-            <div className="kpi-value" style={{ fontSize: 56 }}>{compShown}</div>
-            <div className="vstack" style={{ gap: 6, alignItems: "flex-start" }}>
-              <span className={`badge badge-${compLevel.toLowerCase()}`}>{compLevel}</span>
-              <DeltaChip value={deriveDelta(composite, "escalating")} />
+          <div className="hstack" style={{ gap: 14, alignItems: "baseline" }}>
+            <div className="kpi-value" style={{ fontSize: 52 }}>
+              {impact ? `₹${Math.round(impact.exposure.current_risk_scenario_cost_cr)} Cr` : "—"}
             </div>
+            <DeltaChip value={deriveDelta(composite, "escalating")} />
+          </div>
+          <div className="text-muted text-sm" style={{ marginTop: 4 }}>
+            Reference plant · 2 MTPA cement · 30% gas share
           </div>
         </div>
         <div style={{ textAlign: "right" }}>
-          <div className="text-muted text-sm" style={{ lineHeight: 1.7 }}>
-            Weighted across 3 corridors<br />
+          <div className="text-dim" style={{ fontSize: 10, letterSpacing: 1, marginBottom: 4 }}>COMPOSITE RISK SCORE</div>
+          <div className="hstack" style={{ gap: 10, justifyContent: "flex-end", alignItems: "baseline" }}>
+            <span style={{ fontFamily: "var(--font-display)", fontSize: 30, fontWeight: 700 }}>{compShown}</span>
+            <span className={`badge badge-${compLevel.toLowerCase()}`}>{compLevel}</span>
+          </div>
+          <div className="text-muted text-sm" style={{ marginTop: 6 }}>
             Hormuz 60% · Red Sea 30% · Caspian 10%
           </div>
           <div className="asof mt-8" style={{ justifyContent: "flex-end" }}>AS OF {fmtTime(data.hormuz.updated)} IST</div>

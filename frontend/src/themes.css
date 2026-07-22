@@ -4,55 +4,47 @@
    Nothing is hardcoded — add vars here, never hex in components.
    ──────────────────────────────────────────────────────────────────── */
 
-/* ══ BLOOMBERG TERMINAL — dark, dense, monospace ══════════════════════ */
+/* ══ TERMINAL — deep navy enterprise (Palantir / Kpler / modern BBG) ══ */
 :root[data-theme="bloomberg"] {
-  --bg:            #0a0a0a;
-  --bg-elev:       #141414;
-  --bg-panel:      #141414;
-  --bg-panel-2:    #191919;   /* nested surface / table stripe */
-  --border:        #262626;
-  --border-strong: #3a3a3a;
+  --bg:            #060b16;   /* deep navy, not black */
+  --bg-elev:       #0b1322;
+  --bg-panel:      #0b1322;
+  --bg-panel-2:    #101a2c;   /* nested surface / table stripe */
+  --border:        #1b2740;
+  --border-strong: #2a3b5e;
 
-  --fg:            #f0f0f0;
-  --fg-muted:      #8a8a8a;
-  --fg-dim:        #5a5a5a;
+  --fg:            #e8edf6;
+  --fg-muted:      #8b98b3;
+  --fg-dim:        #5a6785;
 
-  --accent:        #ff9500;   /* Bloomberg orange */
-  --accent-alt:    #ffb84d;
-  --accent-soft:   color-mix(in srgb, #ff9500 14%, transparent);
-  --link:          #4da6ff;
+  --accent:        #3b82f6;   /* enterprise blue */
+  --accent-alt:    #60a5fa;
+  --accent-soft:   color-mix(in srgb, #3b82f6 12%, transparent);
+  --link:          #60a5fa;
 
-  --green:         #00d68f;
-  --amber:         #ffb800;
-  --red:           #ff3b3b;
-  --blue:          #4da6ff;
-  --purple:        #b366ff;
+  --green:         #10b981;
+  --amber:         #f59e0b;
+  --red:           #ef4444;
+  --blue:          #3b82f6;
+  --purple:        #a78bfa;
 
-  --font-body:     'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
-  --font-display:  'IBM Plex Mono', 'Consolas', monospace;
+  --font-body:     'Inter', -apple-system, 'Segoe UI', sans-serif;
+  --font-display:  'Space Grotesk', 'Inter', sans-serif;
   --font-numeric:  'IBM Plex Mono', 'Consolas', monospace;
 
-  --radius:        2px;
-  --radius-lg:     3px;
-  --shadow:        none;
-  --shadow-hover:  0 0 0 1px var(--border-strong);
-  --panel-pad:     12px;
-  --gutter:        12px;
-  --nav-bg:        #000;
-  --nav-border:    #ff9500;
+  --radius:        6px;
+  --radius-lg:     8px;
+  --shadow:        0 1px 2px rgba(2,6,17,.5);
+  --shadow-hover:  0 0 0 1px var(--border-strong), 0 8px 24px -12px rgba(2,6,17,.8);
+  --panel-pad:     18px;
+  --gutter:        16px;
+  --nav-bg:        #050a13;
+  --nav-border:    #1b2740;
 
-  --grid-line:     rgba(255,255,255,0.025);
-  --glow:          0 0 24px -4px;
+  --grid-line:     transparent;
+  --glow:          0 0 8px -6px;   /* glow cut ~70% */
   --ease:          cubic-bezier(.2,.7,.3,1);
   --dur:           .22s;
-}
-
-/* Subtle terminal grid texture on the page background */
-:root[data-theme="bloomberg"] body {
-  background-image:
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size: 44px 44px;
 }
 
 /* ══ SAAS — modern, clean, spacious ═══════════════════════════════════ */
@@ -79,21 +71,21 @@
   --blue:          #2563eb;
   --purple:        #9333ea;
 
-  --font-body:     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
-  --font-display:  -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
-  --font-numeric:  'SF Mono', 'Monaco', 'Consolas', monospace;
+  --font-body:     'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display:  'Space Grotesk', 'Inter', -apple-system, sans-serif;
+  --font-numeric:  'IBM Plex Mono', 'SF Mono', 'Consolas', monospace;
 
   --radius:        10px;
   --radius-lg:     16px;
   --shadow:        0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
   --shadow-hover:  0 6px 16px -6px rgba(16,24,40,.16), 0 2px 6px -2px rgba(16,24,40,.08);
-  --panel-pad:     22px;
-  --gutter:        20px;
+  --panel-pad:     24px;
+  --gutter:        24px;
   --nav-bg:        rgba(255,255,255,.82);
   --nav-border:    #e7ecf2;
 
   --grid-line:     transparent;
-  --glow:          0 12px 40px -12px;
+  --glow:          0 6px 18px -12px;   /* glow cut ~70% */
   --ease:          cubic-bezier(.2,.7,.3,1);
   --dur:           .28s;
 }
@@ -153,7 +145,7 @@ b, strong { font-weight: 700; }
   z-index: 20;
   backdrop-filter: saturate(1.4) blur(10px);
 }
-:root[data-theme="bloomberg"] .nav { backdrop-filter: none; box-shadow: 0 1px 0 rgba(255,149,0,.12); }
+:root[data-theme="bloomberg"] .nav { backdrop-filter: none; box-shadow: 0 1px 0 rgba(59,130,246,.10); }
 .nav .brand {
   font-family: var(--font-display);
   font-weight: 800;
@@ -278,7 +270,7 @@ b, strong { font-weight: 700; }
   align-items: center;
   gap: 8px;
 }
-:root[data-theme="bloomberg"] .panel-title { color: var(--accent); }
+/* Enterprise look: panel titles stay muted in both themes (no accent shouting) */
 .panel-title .dot { width: 6px; height: 6px; border-radius: 2px; background: currentColor; }
 .panel h2 { font-size: 18px; font-weight: 700; color: var(--fg); margin-bottom: 6px; font-family: var(--font-display); }
 .panel p { color: var(--fg-muted); line-height: 1.6; }
@@ -305,7 +297,7 @@ b, strong { font-weight: 700; }
 .kpi { display: flex; flex-direction: column; gap: 4px; }
 .kpi-label { font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--fg-muted); }
 .kpi-value {
-  font-family: var(--font-numeric);
+  font-family: var(--font-display);
   font-size: 28px;
   font-weight: 700;
   color: var(--fg);
@@ -374,7 +366,7 @@ b, strong { font-weight: 700; }
   content: "";
   position: absolute; inset: 0;
   background: radial-gradient(120% 90% at 50% -10%, var(--sig, transparent) 0%, transparent 60%);
-  opacity: .5;
+  opacity: .18;   /* glow wash cut ~70% */
   pointer-events: none;
 }
 .signal-card.BUY_NOW       { border-color: var(--red);   --sig: color-mix(in srgb, var(--red)   22%, transparent); }
