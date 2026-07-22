@@ -8,6 +8,7 @@ import PlantImpact from "./pages/PlantImpact";
 import Backtest from "./pages/Backtest";
 import Inject from "./pages/Inject";
 import TimeTravel from "./pages/TimeTravel";
+import Portfolio from "./pages/Portfolio";
 
 import "./themes.css";
 
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="scenario"     element={<Scenario />} />
           <Route path="plant"        element={<PlantImpact />} />
           <Route path="backtest"     element={<Backtest />} />
+          <Route path="portfolio"    element={<Portfolio />} />
           <Route path="inject"       element={<Inject />} />
           <Route path="history"      element={<TimeTravel />} />
         </Route>

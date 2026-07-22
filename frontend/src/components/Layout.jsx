@@ -2,14 +2,15 @@ import { NavLink, Outlet } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 
 const NAV = [
-  { to: "/",          fn: "F1", label: "Risk Center"  },
-  { to: "/prices",    fn: "F2", label: "IGX History"  },
-  { to: "/signal",    fn: "F3", label: "Signal"       },
-  { to: "/scenario",  fn: "F4", label: "Scenario"     },
-  { to: "/plant",     fn: "F5", label: "Plant Impact" },
-  { to: "/backtest",  fn: "F6", label: "Backtest"     },
-  { to: "/inject",    fn: "F7", label: "Inject"       },
-  { to: "/history",   fn: "F8", label: "Time-Travel"  },
+  { to: "/",           fn: "F1", label: "Risk Center"  },
+  { to: "/prices",     fn: "F2", label: "IGX History"  },
+  { to: "/signal",     fn: "F3", label: "Signal"       },
+  { to: "/scenario",   fn: "F4", label: "Scenario"     },
+  { to: "/plant",      fn: "F5", label: "Plant Impact" },
+  { to: "/portfolio",  fn: "F6", label: "Portfolio"    },
+  { to: "/backtest",   fn: "F7", label: "Backtest"     },
+  { to: "/inject",     fn: "F8", label: "Inject"       },
+  { to: "/history",    fn: "F9", label: "Time-Travel"  },
 ];
 
 export default function Layout() {

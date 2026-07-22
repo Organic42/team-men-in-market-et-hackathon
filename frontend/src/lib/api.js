@@ -32,3 +32,10 @@ export const getBacktestHero   = () => api.get("/api/backtest/hero").then(r => r
 // ── Custom event injector + historical time-travel ───────────────────
 export const injectEvent    = (headline) => api.post("/api/risk/inject", { headline }).then(r => r.data);
 export const getHistoricalAt = (month)   => api.get("/api/risk/at",     { params: { month } }).then(r => r.data);
+
+// ── Peer benchmarking ────────────────────────────────────────────────
+export const getPeerBenchmark = (plant_type, capacity_mtpa, gas_share_pct) =>
+  api.get("/api/plant/benchmark", { params: { plant_type, capacity_mtpa, gas_share_pct } }).then(r => r.data);
+
+// ── Enterprise portfolio ─────────────────────────────────────────────
+export const getPortfolio = () => api.get("/api/plant/portfolio").then(r => r.data);

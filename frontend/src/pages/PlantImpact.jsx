@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { getPlantImpact, getSignal } from "../lib/api";
+import { getPlantImpact, getSignal, getPeerBenchmark } from "../lib/api";
+import PeerBenchmark from "../components/PeerBenchmark";
 
 const PLANT_TYPES = [
   { value: "cement",   label: "Cement" },
@@ -14,13 +15,19 @@ export default function PlantImpact() {
   const [gasShare, setGasShare]   = useState(30);
   const [data, setData]           = useState(null);
   const [signal, setSignal]       = useState(null);
+  const [peers, setPeers]         = useState(null);
   const [loading, setLoading]     = useState(false);
 
   async function calc() {
     setLoading(true);
     try {
-      const d = await getPlantImpact(plantType, capacity, gasShare);
+      // Fetch impact + peer benchmark in parallel — same inputs
+      const [d, p] = await Promise.all([
+        getPlantImpact(plantType, capacity, gasShare),
+        getPeerBenchmark(plantType, capacity, gasShare).catch(() => null),
+      ]);
       setData(d);
+      setPeers(p);
     } finally { setLoading(false); }
   }
   useEffect(() => { calc(); /* initial */ /* eslint-disable-next-line */ }, []);
@@ -106,6 +113,8 @@ export default function PlantImpact() {
                 </div>
               </div>
             </div>
+
+            <PeerBenchmark data={peers} />
 
             <div className="panel">
               <div className="panel-title"><span className="dot" /> CFO SUMMARY</div>

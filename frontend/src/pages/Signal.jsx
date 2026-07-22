@@ -4,6 +4,7 @@ import DeltaChip from "../components/DeltaChip";
 import Sparkline from "../components/Sparkline";
 import { useCountUp, deriveSeries, levelColor, fmtTime } from "../hooks/useCountUp";
 import { LoadingBrand } from "../components/Skeleton";
+import WhatsAppMock from "../components/WhatsAppMock";
 
 const ACTION_LABEL = { BUY_NOW: "BUY NOW", PARTIAL_HEDGE: "HEDGE 50%", WAIT: "WAIT" };
 const ACTION_SUB = {
@@ -72,6 +73,8 @@ export default function Signal() {
           );
         })}
       </div>
+
+      <WhatsAppMock signal={data} />
 
       <div className="panel">
         <div className="panel-title"><span className="dot" /> SIGNAL DRIVERS · CORRIDOR BREAKDOWN</div>

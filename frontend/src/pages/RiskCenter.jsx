@@ -5,6 +5,7 @@ import WorldMap from "../components/WorldMap";
 import DeltaChip from "../components/DeltaChip";
 import { useCountUp, deriveDelta, levelColor, fmtTime } from "../hooks/useCountUp";
 import { SkeletonPanel } from "../components/Skeleton";
+import LineageModal from "../components/LineageModal";
 
 const NAMES = {
   hormuz: "Strait of Hormuz",
@@ -15,6 +16,7 @@ const NAMES = {
 export default function RiskCenter() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const [lineageKey, setLineageKey] = useState(null);
   useEffect(() => { getCorridors().then(setData).catch(e => setError(String(e))); }, []);
 
   const composite = data ? Math.round(
@@ -73,8 +75,14 @@ export default function RiskCenter() {
           <WorldMap corridors={data} />
           <div className="grid grid-3" style={{ gap: 14 }}>
             {["hormuz","red_sea","caspian"].map(k => (
-              <div className="stat-tile" key={k}>
-                <div className="text-dim" style={{ fontSize: 9, letterSpacing: 1, textTransform: "uppercase" }}>{k.replace("_"," ")}</div>
+              <div className="stat-tile" key={k}
+                   onClick={() => setLineageKey(k)}
+                   style={{ cursor: "pointer", position: "relative" }}
+                   title="Click to see why this score">
+                <div className="hstack between">
+                  <div className="text-dim" style={{ fontSize: 9, letterSpacing: 1, textTransform: "uppercase" }}>{k.replace("_"," ")}</div>
+                  <div className="text-dim" style={{ fontSize: 9, letterSpacing: 1 }}>WHY? ▸</div>
+                </div>
                 <div className="hstack between" style={{ marginTop: 4 }}>
                   <span className="text-mono" style={{ fontSize: 18, fontWeight: 700, color: levelColor(data[k].level) }}>{data[k].score}</span>
                   <DeltaChip value={deriveDelta(data[k].score, data[k].trend)} />
@@ -108,6 +116,14 @@ export default function RiskCenter() {
           </div>
         </div>
       </div>
+
+      {lineageKey && (
+        <LineageModal
+          corridorKey={lineageKey}
+          corridor={data[lineageKey]}
+          onClose={() => setLineageKey(null)}
+        />
+      )}
     </div>
   );
 }
