@@ -17,7 +17,7 @@ export default function Layout() {
   return (
     <div className="app">
       <nav className="nav">
-        <div className="brand">CRUX</div>
+        <div className="brand">CRUXIQ</div>
         <div className="nav-links">
           {NAV.map(n => (
             <NavLink key={n.to} to={n.to} end={n.to === "/"}
