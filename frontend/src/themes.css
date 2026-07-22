@@ -1,0 +1,624 @@
+/* ────────────────────────────────────────────────────────────────────
+   CruxIQ dual theme system  ·  v2 (ET AI Hackathon demo build)
+   All components use var(--xxx). Switching data-theme swaps every var.
+   Nothing is hardcoded — add vars here, never hex in components.
+   ──────────────────────────────────────────────────────────────────── */
+
+/* ══ BLOOMBERG TERMINAL — dark, dense, monospace ══════════════════════ */
+:root[data-theme="bloomberg"] {
+  --bg:            #0a0a0a;
+  --bg-elev:       #141414;
+  --bg-panel:      #141414;
+  --bg-panel-2:    #191919;   /* nested surface / table stripe */
+  --border:        #262626;
+  --border-strong: #3a3a3a;
+
+  --fg:            #f0f0f0;
+  --fg-muted:      #8a8a8a;
+  --fg-dim:        #5a5a5a;
+
+  --accent:        #ff9500;   /* Bloomberg orange */
+  --accent-alt:    #ffb84d;
+  --accent-soft:   color-mix(in srgb, #ff9500 14%, transparent);
+  --link:          #4da6ff;
+
+  --green:         #00d68f;
+  --amber:         #ffb800;
+  --red:           #ff3b3b;
+  --blue:          #4da6ff;
+  --purple:        #b366ff;
+
+  --font-body:     'IBM Plex Mono', 'Consolas', 'Monaco', monospace;
+  --font-display:  'IBM Plex Mono', 'Consolas', monospace;
+  --font-numeric:  'IBM Plex Mono', 'Consolas', monospace;
+
+  --radius:        2px;
+  --radius-lg:     3px;
+  --shadow:        none;
+  --shadow-hover:  0 0 0 1px var(--border-strong);
+  --panel-pad:     12px;
+  --gutter:        12px;
+  --nav-bg:        #000;
+  --nav-border:    #ff9500;
+
+  --grid-line:     rgba(255,255,255,0.025);
+  --glow:          0 0 24px -4px;
+  --ease:          cubic-bezier(.2,.7,.3,1);
+  --dur:           .22s;
+}
+
+/* Subtle terminal grid texture on the page background */
+:root[data-theme="bloomberg"] body {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* ══ SAAS — modern, clean, spacious ═══════════════════════════════════ */
+:root[data-theme="saas"] {
+  --bg:            #f6f8fb;
+  --bg-elev:       #ffffff;
+  --bg-panel:      #ffffff;
+  --bg-panel-2:    #f8fafc;
+  --border:        #e7ecf2;
+  --border-strong: #d4dce6;
+
+  --fg:            #0b1220;
+  --fg-muted:      #647087;
+  --fg-dim:        #97a2b4;
+
+  --accent:        #2563eb;
+  --accent-alt:    #3b82f6;
+  --accent-soft:   color-mix(in srgb, #2563eb 9%, transparent);
+  --link:          #2563eb;
+
+  --green:         #16a34a;
+  --amber:         #f59e0b;
+  --red:           #dc2626;
+  --blue:          #2563eb;
+  --purple:        #9333ea;
+
+  --font-body:     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  --font-display:  -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  --font-numeric:  'SF Mono', 'Monaco', 'Consolas', monospace;
+
+  --radius:        10px;
+  --radius-lg:     16px;
+  --shadow:        0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+  --shadow-hover:  0 6px 16px -6px rgba(16,24,40,.16), 0 2px 6px -2px rgba(16,24,40,.08);
+  --panel-pad:     22px;
+  --gutter:        20px;
+  --nav-bg:        rgba(255,255,255,.82);
+  --nav-border:    #e7ecf2;
+
+  --grid-line:     transparent;
+  --glow:          0 12px 40px -12px;
+  --ease:          cubic-bezier(.2,.7,.3,1);
+  --dur:           .28s;
+}
+
+/* ── base ─────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+:root { color-scheme: dark; }
+:root[data-theme="saas"] { color-scheme: light; }
+
+/* Everything themable eases together for a smooth toggle */
+.panel, .nav, .signal-card, .badge, .btn, input, select, td, th, .kpi-value,
+.theme-toggle, .fkey, .delta-chip, .skeleton, .stat-tile {
+  transition:
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--accent); }
+button { font-family: inherit; cursor: pointer; background: none; border: none; color: inherit; }
+::selection { background: var(--accent-soft); }
+b, strong { font-weight: 700; }
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+/* Scrollbars (Bloomberg only — SaaS keeps native) */
+:root[data-theme="bloomberg"] ::-webkit-scrollbar { width: 10px; height: 10px; }
+:root[data-theme="bloomberg"] ::-webkit-scrollbar-track { background: var(--bg); }
+:root[data-theme="bloomberg"] ::-webkit-scrollbar-thumb { background: #2a2a2a; border: 2px solid var(--bg); border-radius: 6px; }
+:root[data-theme="bloomberg"] ::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+
+/* ────────────────────────────────────────────────────────────────────
+   Nav
+   ──────────────────────────────────────────────────────────────────── */
+.nav {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  height: 52px;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: saturate(1.4) blur(10px);
+}
+:root[data-theme="bloomberg"] .nav { backdrop-filter: none; box-shadow: 0 1px 0 rgba(255,149,0,.12); }
+.nav .brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav .brand::before {
+  content: "";
+  width: 9px; height: 9px;
+  background: var(--green);
+  border-radius: 2px;
+  box-shadow: var(--glow) var(--green);
+  animation: livePulse 2.4s var(--ease) infinite;
+}
+:root[data-theme="saas"] .nav .brand::before { border-radius: 50%; }
+.nav .brand::after { content: "IQ"; color: var(--fg); margin-left: -6px; }
+
+.nav-links { display: flex; gap: 2px; flex: 1; align-items: center; }
+.nav-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  color: var(--fg-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+  position: relative;
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.nav-links a:hover { color: var(--fg); background: var(--bg-panel-2); }
+.nav-links a.active { color: var(--accent); }
+:root[data-theme="saas"] .nav-links a.active { background: var(--accent-soft); }
+:root[data-theme="bloomberg"] .nav-links a.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: inset 0 -2px 0 var(--accent);
+  border-radius: 0;
+}
+/* Fn-key chips (Bloomberg terminal feel). Layout sets .fkey text. */
+.fkey {
+  font-family: var(--font-numeric);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--fg-dim);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  line-height: 1.4;
+}
+.nav-links a:hover .fkey { color: var(--fg-muted); border-color: var(--border-strong); }
+.nav-links a.active .fkey { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+:root[data-theme="saas"] .fkey { display: none; }   /* Linear/Stripe: clean, no key hints */
+
+.theme-toggle {
+  padding: 6px 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--fg-muted);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+
+.main { flex: 1; padding: var(--gutter); width: 100%; margin: 0 auto; max-width: 1500px; }
+:root[data-theme="bloomberg"] .main { max-width: 1680px; padding: 14px; }
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* Page header row */
+.page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.asof {
+  font-family: var(--font-numeric);
+  font-size: 11px;
+  color: var(--fg-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.asof::before {
+  content: "";
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: var(--glow) var(--green);
+  animation: livePulse 2.4s var(--ease) infinite;
+}
+
+/* ────────────────────────────────────────────────────────────────────
+   Panels / cards
+   ──────────────────────────────────────────────────────────────────── */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--panel-pad);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.panel.hover:hover, a .panel:hover { box-shadow: var(--shadow-hover); }
+:root[data-theme="saas"] .panel.hover:hover { transform: translateY(-2px); }
+
+.panel-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+:root[data-theme="bloomberg"] .panel-title { color: var(--accent); }
+.panel-title .dot { width: 6px; height: 6px; border-radius: 2px; background: currentColor; }
+.panel h2 { font-size: 18px; font-weight: 700; color: var(--fg); margin-bottom: 6px; font-family: var(--font-display); }
+.panel p { color: var(--fg-muted); line-height: 1.6; }
+
+.grid { display: grid; gap: var(--gutter); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 720px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+/* Command-dashboard grid for Risk Center (Bloomberg Launchpad feel) */
+.cmd-grid {
+  display: grid;
+  gap: var(--gutter);
+  grid-template-columns: 1.15fr 1.85fr 1fr;
+  align-items: start;
+}
+@media (max-width: 920px)  { .cmd-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 720px)  { .cmd-grid { grid-template-columns: 1fr; } }
+
+/* ────────────────────────────────────────────────────────────────────
+   Numerics + KPIs
+   ──────────────────────────────────────────────────────────────────── */
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi-label { font-size: 10px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--fg-muted); }
+.kpi-value {
+  font-family: var(--font-numeric);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--fg);
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.5px;
+}
+.kpi-delta { font-family: var(--font-numeric); font-size: 12px; font-weight: 600; }
+.kpi-delta.up   { color: var(--red); }
+.kpi-delta.down { color: var(--green); }
+
+/* Delta chip — ▲ +3.2 today */
+.delta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-numeric);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+:root[data-theme="bloomberg"] .delta-chip { border-radius: 3px; }
+.delta-chip.up   { color: var(--red);   background: color-mix(in srgb, var(--red)   16%, transparent); }
+.delta-chip.down { color: var(--green); background: color-mix(in srgb, var(--green) 16%, transparent); }
+.delta-chip.flat { color: var(--fg-muted); background: color-mix(in srgb, var(--fg-muted) 16%, transparent); }
+
+/* Small stat tile used in dense rows */
+.stat-tile { padding: 10px 12px; background: var(--bg-panel-2); border: 1px solid var(--border); border-radius: var(--radius); }
+
+/* ────────────────────────────────────────────────────────────────────
+   Status / risk levels
+   ──────────────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+.badge-green  { background: color-mix(in srgb, var(--green) 15%, transparent); color: var(--green); }
+.badge-amber  { background: color-mix(in srgb, var(--amber) 15%, transparent); color: var(--amber); }
+.badge-red    { background: color-mix(in srgb, var(--red)   15%, transparent); color: var(--red);   }
+[data-theme="bloomberg"] .badge { border: 1px solid currentColor; border-radius: var(--radius); }
+.badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.badge.nodot::before { display: none; }
+.badge-red::before { animation: livePulse 1.4s var(--ease) infinite; }
+
+/* ── Big status card (Signal screen HERO) ─────────────────────────────── */
+.signal-card {
+  padding: 44px 36px;
+  text-align: center;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-panel);
+  position: relative;
+  overflow: hidden;
+}
+.signal-card::before {  /* radial glow wash keyed to signal color */
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 50% -10%, var(--sig, transparent) 0%, transparent 60%);
+  opacity: .5;
+  pointer-events: none;
+}
+.signal-card.BUY_NOW       { border-color: var(--red);   --sig: color-mix(in srgb, var(--red)   22%, transparent); }
+.signal-card.PARTIAL_HEDGE { border-color: var(--amber); --sig: color-mix(in srgb, var(--amber) 22%, transparent); }
+.signal-card.WAIT          { border-color: var(--green); --sig: color-mix(in srgb, var(--green) 22%, transparent); }
+:root[data-theme="bloomberg"] .signal-card.BUY_NOW { box-shadow: var(--glow) color-mix(in srgb, var(--red) 40%, transparent); }
+.signal-eyebrow {
+  position: relative;
+  font-family: var(--font-numeric);
+  font-size: 11px;
+  letter-spacing: 3px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  color: var(--fg-muted);
+  display: inline-flex; gap: 8px; align-items: center;
+}
+.signal-action {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(52px, 9vw, 108px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: .92;
+  margin-bottom: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.signal-card.BUY_NOW       .signal-action { color: var(--red); }
+.signal-card.PARTIAL_HEDGE .signal-action { color: var(--amber); }
+.signal-card.WAIT          .signal-action { color: var(--green); }
+.signal-conf { position: relative; font-family: var(--font-numeric); font-size: 14px; color: var(--fg-muted); margin-bottom: 18px; }
+.signal-conf b { color: var(--fg); }
+.signal-rationale { position: relative; font-size: 15.5px; color: var(--fg); max-width: 660px; margin: 0 auto; line-height: 1.7; }
+:root[data-theme="saas"] .signal-rationale { color: var(--fg-muted); }
+
+/* ── Confidence / progress bar ────────────────────────────────────────── */
+.bar { width: 100%; height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; margin-top: 6px; position: relative; }
+:root[data-theme="bloomberg"] .bar { border-radius: 2px; }
+.bar-fill { height: 100%; background: var(--accent); border-radius: inherit; transition: width 1.1s var(--ease); position: relative; }
+.bar-fill.red   { background: var(--red); }
+.bar-fill.amber { background: var(--amber); }
+.bar-fill.green { background: var(--green); }
+.bar-fill.sheen::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+  animation: sheen 2.2s var(--ease) infinite;
+}
+.bar.tall { height: 12px; }
+
+/* ────────────────────────────────────────────────────────────────────
+   Forms
+   ──────────────────────────────────────────────────────────────────── */
+input, select {
+  font-family: inherit;
+  background: var(--bg-panel);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  font-size: 13px;
+  width: 100%;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+input:hover, select:hover { border-color: var(--border-strong); }
+input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+:root[data-theme="bloomberg"] input:focus, :root[data-theme="bloomberg"] select:focus { box-shadow: inset 0 0 0 1px var(--accent); }
+
+/* Range sliders — themed */
+input[type="range"] { -webkit-appearance: none; appearance: none; height: 6px; padding: 0; background: var(--border); border: none; border-radius: 999px; cursor: pointer; }
+input[type="range"]:focus { box-shadow: none; }
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--bg-panel);
+  box-shadow: 0 0 0 1px var(--border-strong);
+  transition: transform .12s var(--ease);
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+input[type="range"]::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg-panel); }
+:root[data-theme="bloomberg"] input[type="range"]::-webkit-slider-thumb { border-radius: 2px; }
+
+label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 5px; }
+.btn {
+  background: var(--accent);
+  color: var(--bg);
+  padding: 11px 18px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform .12s var(--ease), box-shadow var(--dur) var(--ease), opacity .15s;
+}
+[data-theme="saas"] .btn { color: #fff; box-shadow: 0 1px 2px rgba(37,99,235,.35); }
+.btn:hover { box-shadow: var(--glow) var(--accent-soft); }
+:root[data-theme="saas"] .btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px -8px rgba(37,99,235,.6); }
+.btn:active { transform: translateY(0) scale(.99); }
+.btn:disabled { opacity: .5; cursor: default; transform: none; }
+
+/* ────────────────────────────────────────────────────────────────────
+   Tables
+   ──────────────────────────────────────────────────────────────────── */
+table { width: 100%; border-collapse: collapse; font-family: var(--font-numeric); font-size: 12px; font-variant-numeric: tabular-nums; }
+th {
+  text-align: left; color: var(--fg-muted); font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; font-size: 10px; padding: 8px 8px;
+  border-bottom: 1px solid var(--border-strong);
+  position: sticky; top: 0; background: var(--bg-panel); z-index: 1;
+}
+td { padding: 7px 8px; color: var(--fg); border-bottom: 1px solid var(--border); }
+tbody tr { transition: background var(--dur) var(--ease); }
+tbody tr:hover { background: var(--bg-panel-2); }
+:root[data-theme="bloomberg"] tbody tr:hover { box-shadow: inset 2px 0 0 var(--accent); }
+
+/* ────────────────────────────────────────────────────────────────────
+   Loading skeletons  (replaces plain "Loading…" text)
+   ──────────────────────────────────────────────────────────────────── */
+.skeleton { position: relative; overflow: hidden; background: var(--bg-panel-2); border-radius: var(--radius); }
+.skeleton::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--fg) 6%, transparent), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 1.4s infinite;
+}
+.sk-line { height: 12px; border-radius: 4px; }
+.sk-title { height: 16px; width: 40%; border-radius: 4px; }
+.skeleton-panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--panel-pad); }
+.loading-brand {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: 56px; color: var(--fg-muted); font-family: var(--font-numeric); font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+}
+.loading-brand .ring { width: 40px; height: 40px; border-radius: 50%; border: 3px solid var(--border); border-top-color: var(--accent); animation: spin .9s linear infinite; }
+
+.loading { padding: 40px; text-align: center; color: var(--fg-muted); font-family: var(--font-numeric); font-size: 12px; }
+.error { padding: 20px; background: color-mix(in srgb, var(--red) 10%, var(--bg-panel)); border: 1px solid var(--red); border-radius: var(--radius-lg); color: var(--red); }
+
+/* ── recharts polish (tooltip/legend inherit theme) ───────────────────── */
+.recharts-default-tooltip {
+  background: var(--bg-panel) !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-hover);
+  font-family: var(--font-numeric) !important;
+  font-size: 12px !important;
+  padding: 8px 10px !important;
+}
+.recharts-tooltip-label { color: var(--accent) !important; font-weight: 700 !important; margin-bottom: 4px !important; }
+.recharts-tooltip-item { color: var(--fg) !important; }
+.recharts-cartesian-axis-tick text { fill: var(--fg-muted); }
+.recharts-legend-item-text { color: var(--fg-muted) !important; font-size: 11px; }
+
+/* ────────────────────────────────────────────────────────────────────
+   Animation utilities
+   ──────────────────────────────────────────────────────────────────── */
+.fade-up { animation: fadeUp .5s var(--ease) both; }
+.fade-in { animation: fadeIn .4s var(--ease) both; }
+.stagger > * { animation: fadeUp .5s var(--ease) both; }
+.stagger > *:nth-child(1) { animation-delay: .04s; }
+.stagger > *:nth-child(2) { animation-delay: .10s; }
+.stagger > *:nth-child(3) { animation-delay: .16s; }
+.stagger > *:nth-child(4) { animation-delay: .22s; }
+
+@keyframes shimmer   { 100% { transform: translateX(100%); } }
+@keyframes sheen     { 0% { transform: translateX(-120%);} 60%,100% { transform: translateX(120%);} }
+@keyframes spin      { 100% { transform: rotate(360deg); } }
+@keyframes fadeUp    { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none; } }
+@keyframes fadeIn    { from { opacity: 0;} to { opacity: 1; } }
+@keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes ringPulse { 0% { transform: scale(1); opacity: .6; } 70%,100% { transform: scale(2.6); opacity: 0; } }
+@keyframes dashDraw  { from { stroke-dashoffset: var(--len, 1000); } to { stroke-dashoffset: 0; } }
+@keyframes tankerMove{ from { offset-distance: 0%; } to { offset-distance: 100%; } }
+@keyframes dashFlow  { to { stroke-dashoffset: -40; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
+/* ── utility ──────────────────────────────────────────────────────────── */
+.hstack { display: flex; align-items: center; gap: 12px; }
+.vstack { display: flex; flex-direction: column; gap: 12px; }
+.between { justify-content: space-between; }
+.wrap { flex-wrap: wrap; }
+.mt-8 { margin-top: 8px; } .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; }
+.mb-8 { margin-bottom: 8px; } .mb-16 { margin-bottom: 16px; }
+.text-muted { color: var(--fg-muted); }
+.text-dim   { color: var(--fg-dim); }
+.text-mono  { font-family: var(--font-numeric); font-variant-numeric: tabular-nums; }
+.text-sm    { font-size: 12px; }
+.text-lg    { font-size: 16px; }
+.text-xl    { font-size: 20px; }
+.uppercase  { text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+
+/* ────────────────────────────────────────────────────────────────────
+   PRINT / PDF EXPORT (CFO one-pager)
+   Triggered by window.print() from the Plant Impact page.
+   Force a clean white light theme so the PDF is board-meeting-friendly
+   regardless of which theme was active on screen.
+   ──────────────────────────────────────────────────────────────────── */
+.print-only { display: none; }
+
+@media print {
+  @page { size: A4; margin: 14mm; }
+
+  html, body {
+    background: #fff !important;
+    color: #0b1220 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif !important;
+    font-size: 11pt;
+  }
+
+  /* Hide chrome */
+  .nav, .theme-toggle, button, input, select, textarea, .no-print, .fade-up,
+  .stagger { display: none !important; }
+
+  /* Reveal the print-only report */
+  .print-only { display: block !important; }
+  .app > .nav { display: none !important; }
+  .main > .vstack:not(.print-only) { display: none !important; }
+
+  /* Reset panels for paper */
+  .print-only, .print-only * {
+    background: #fff !important;
+    color: #0b1220 !important;
+    box-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .print-only .panel {
+    border: 1px solid #cbd5e1 !important;
+    padding: 12px 16px !important;
+    margin-bottom: 10px !important;
+    page-break-inside: avoid;
+  }
+  .print-only h1 { font-size: 22pt; font-weight: 800; margin-bottom: 4px; }
+  .print-only h2 { font-size: 12pt; font-weight: 700; color: #2563eb !important; margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+  .print-only .kpi-label { color: #64748b !important; font-size: 8pt; letter-spacing: 1.5px; text-transform: uppercase; }
+  .print-only .kpi-value { font-size: 20pt; font-weight: 800; font-family: 'SF Mono', Monaco, Consolas, monospace; }
+  .print-only .red      { color: #dc2626 !important; }
+  .print-only .green    { color: #16a34a !important; }
+  .print-only .amber    { color: #b45309 !important; }
+  .print-only .brand    { color: #2563eb !important; font-weight: 800; letter-spacing: 2px; font-size: 10pt; }
+  .print-only .grid     { display: grid; gap: 12px; }
+  .print-only .grid-3   { grid-template-columns: repeat(3, 1fr); }
+  .print-only .grid-2   { grid-template-columns: repeat(2, 1fr); }
+  .print-only .foot     { color: #64748b !important; font-size: 8pt; text-align: center; margin-top: 12px; border-top: 1px solid #cbd5e1; padding-top: 6px; }
+}
